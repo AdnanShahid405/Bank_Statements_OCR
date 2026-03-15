@@ -41,40 +41,22 @@ project/
 pip install -r requirements.txt
 ```
 
-### 2. Install Poppler (required by `pdf2image` for sample generation only)
+### 2. Set up your `.env` file
 
-| OS      | Command                                                                 |
-|---------|-------------------------------------------------------------------------|
-| Windows | Download from [poppler-windows](https://github.com/oschwartz10612/poppler-windows/releases), add `bin/` to PATH |
-| Linux   | `sudo apt install poppler-utils`                                        |
-| Mac     | `brew install poppler`                                                  |
+Create a `.env` file in the root of the project with your Azure credentials:
 
-### 3. Set Azure credentials
-
-```bash
-# Option A — environment variables (recommended)
-export AZURE_ENDPOINT="https://your-resource.cognitiveservices.azure.com/"
-export AZURE_API_KEY="your-api-key-here"
-
-# Option B — pass via CLI flags (see Usage below)
+```
+AZURE_ENDPOINT=https://your-resource.cognitiveservices.azure.com/
+AZURE_API_KEY=your-api-key-here
 ```
 
----
-
-## Usage
+### 3. Run
 
 ```bash
-python main.py --folder sample_pdfs --output output/results.xlsx
+py main.py -f sample_pdfs
 ```
 
-### CLI Options
-
-| Flag               | Description                                      | Default                  |
-|--------------------|--------------------------------------------------|--------------------------|
-| `--folder` / `-f`  | Path to folder containing PDF files             | *(required)*             |
-| `--output` / `-o`  | Output Excel file path                           | `output/results.xlsx`    |
-| `--azure-endpoint` | Azure Document Intelligence endpoint URL        | `$AZURE_ENDPOINT` env var|
-| `--azure-key`      | Azure Document Intelligence API key             | `$AZURE_API_KEY` env var |
+By default the output Excel file will be saved to `output/results.xlsx`.
 
 ---
 
