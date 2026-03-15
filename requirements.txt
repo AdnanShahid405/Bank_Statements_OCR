@@ -1,0 +1,6 @@
+pdfplumber
+pymupdf
+azure-ai-formrecognizer
+azure-core
+openpyxl
+python-dotenv
