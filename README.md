@@ -62,10 +62,12 @@ By default the output Excel file will be saved to `output/results.xlsx`.
 
 ## Sample PDFs
 
-Two sample bank statement PDFs are included in the `sample_pdfs/` folder for testing:
+Two sample bank statement PDFs are included in the `sample_pdfs/` folder to test both paths of the pipeline:
 
-- `native_statement.pdf` — generated using `reportlab` with a real text layer, processed by `pdfplumber`
-- `scanned_statement.pdf` — created by converting the native PDF pages to images using `pdf2image` and re-embedding them into a new PDF using `img2pdf`, which strips the text layer entirely and triggers the Azure fallback
+- `native_statement.pdf` — generated using `reportlab` with a real text layer, used to test the `pdfplumber` native extraction path
+- `scanned_statement.pdf` — created by converting the native PDF pages to images and re-embedding them into a new PDF, stripping the text layer entirely and triggering the Azure Document Intelligence fallback
+
+An intentional discrepancy has been introduced in `scanned_statement.pdf` where the closing balance is set to `$7,850.00` instead of the correct `$7,725.71` to verify that the variance flag is working as expected.
 
 ---
 
@@ -73,16 +75,15 @@ Two sample bank statement PDFs are included in the `sample_pdfs/` folder for tes
 
 Each PDF gets its own sheet with:
 
-| Column       | Notes                                         |
-|--------------|-----------------------------------------------|
-| Date         | Transaction date                              |
-| Description  | Narration / transaction detail                |
-| Debit ($)    | Amount debited (blank = `—`)                  |
-| Credit ($)   | Amount credited (blank = `—`)                 |
-| Balance ($)  | Running balance                               |
-| Flags        | Lists low-confidence fields, or `✓` if clean  |
+| Column       | Notes                                        |
+|--------------|----------------------------------------------|
+| Date         | Transaction date                             |
+| Description  | Narration / transaction detail               |
+| Debit ($)    | Amount debited (blank = `—`)                 |
+| Credit ($)   | Amount credited (blank = `—`)                |
+| Balance ($)  | Running balance                              |
 
-**Red cell fill** = Azure confidence score below 85% for that specific field.
+Any field where the Azure confidence score is below 85% is highlighted with a **red cell fill**.
 
 A **Balance Validation Summary** is appended at the bottom of each sheet showing opening balance, totals, expected vs actual closing balance, and variance if any.
 
@@ -95,4 +96,4 @@ A **Balance Validation Summary** is appended at the bottom of each sheet showing
 3. Rows with both zero debit and zero credit (e.g., opening/closing rows) are excluded from totals.
 4. A floating-point tolerance of **$0.01** is allowed in balance validation.
 5. For native PDFs, `pdfplumber` table extraction is attempted first; regex parsing is used as a fallback for unstructured text layouts.
-6. Azure's `prebuilt-layout` model is used for scanned PDFs — it provides per-cell confidence scores.
+6. Azure's `prebuilt-layout` model is used for scanned PDFs — confidence is derived from word-level scores since the model does not return per-cell confidence directly.
