@@ -22,6 +22,7 @@ A Python tool that extracts transactions from bank statement PDFs into a structu
 project/
 ├── main.py                    # Entry point (CLI)
 ├── extractor.py               # PDF extraction logic (native + Azure)
+├── .env
 ├── excel_writer.py            # Excel output with formatting & flags
 ├── validator.py               # Balance validation logic
 ├── sample_pdfs/
