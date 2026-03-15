@@ -6,7 +6,7 @@ A Python tool that extracts transactions from bank statement PDFs into a structu
 
 ## Features
 
-- Detects native text layer — extracts directly with `pdfplumber` (fast, no API cost)
+- Detects native text layer extracts directly with `pdfplumber` (fast, no API cost)
 - Falls back to **Azure Document Intelligence** for scanned/image PDFs
 - Extracts: Date, Description, Debit, Credit, Running Balance
 - Flags low-confidence fields (< 85%) with **red cell fill** in Excel
